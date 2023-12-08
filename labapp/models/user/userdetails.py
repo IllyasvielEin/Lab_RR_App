@@ -1,7 +1,12 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 class UserDetails(models.Model):
+    class Meta:
+        app_label = 'labapp'
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='details')
 
     name = models.CharField(max_length=100, null=False, verbose_name='真实姓名')
 
@@ -11,15 +16,15 @@ class UserDetails(models.Model):
         SECRET = "S"
         OTHER = "O"
 
-    gender = models.CharField(max_length=1, null=False, choices=GenderType, default=GenderType.SECRET, verbose_name='性别')
+    gender = models.CharField(max_length=1, blank=False, choices=GenderType, default=GenderType.SECRET, verbose_name='性别')
 
     age = models.IntegerField(verbose_name='年龄')
 
-    major = models.CharField(max_length=100, null=False, verbose_name='专业')
+    major = models.CharField(max_length=100, blank=False, verbose_name='专业')
 
-    student_id = models.CharField(max_length=20, null=False, verbose_name='学号')
+    student_id = models.CharField(max_length=20, blank=False, verbose_name='学号')
 
-    contact = models.CharField(max_length=50, null=False, verbose_name='联系方式')
+    contact = models.CharField(max_length=50, blank=False, verbose_name='联系方式')
 
     hobbies = models.CharField(max_length=255, verbose_name='爱好')
 
@@ -32,6 +37,9 @@ class UserDetails(models.Model):
 
 
 class Project(models.Model):
+    class Meta:
+        app_label = 'labapp'
+
     user = models.ForeignKey(UserDetails, on_delete=models.CASCADE, related_name='projects')
     name = models.CharField(max_length=20, verbose_name='项目名称')
     responsibilities = models.CharField(max_length=10, verbose_name='项目角色')
@@ -43,6 +51,9 @@ class Project(models.Model):
         return self.name
 
 class Rewards(models.Model):
+    class Meta:
+        app_label = 'labapp'
+
     users = models.ManyToManyField(UserDetails, related_name='rewards')
 
     name = models.CharField(max_length=100, verbose_name='获奖名称')

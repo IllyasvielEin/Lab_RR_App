@@ -1,14 +1,17 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from labapp.modeldir.user.userbasic import UserBasic
-from labapp.modeldir.lab.labinfo import Laboratory
+from ..user import User
+from labapp.models.lab.labinfo import Laboratory
 
 
 class Application(models.Model):
-    user = models.ForeignKey(UserBasic, on_delete=models.CASCADE)
+    class Meta:
+        app_label = 'labapp'
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     lab = models.ForeignKey(Laboratory, on_delete=models.CASCADE)
-    application_date = models.DateField(null=False, auto_now_add=True)
+    application_date = models.DateField(blank=False, auto_now_add=True)
 
     class AppStatus(models.TextChoices):
         APPLIED = 'AP', _('Applied')

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}社团管理{% endblock %}
+
+{% block end_script %}
+<script>
+function validateForm() {
+    const password = document.getElementById("register_password").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+    if (password !== confirmPassword) {
+        alert("密码不匹配");
+        return false;
+    }
+    const studentId = document.getElementById("student_id").value;
+    if (isNaN(studentId) || studentId.length !== 10) {
+        alert("学号输入错误");
+        return false;
+    }
+    
+
+    return true;
+}
+</script>
+{% endblock %}
+
+{% block control %}
+{% if username is none %}
+<div>
+    <button id="button_login" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#motal_login">
+        Login
+    </button>
+    <button id="button_register" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#motal_register">
+        Register
+    </button>
+</div>
+{% else %}
+<div class="container">
+    <ul class="nav nav-tabs">
+        <li class="{% if active_label == 1 %}active{% endif %}">
+            <a data-toggle="tab" href="#recruInfo">1</a>
+        </li>
+        <li class="{% if active_label == 2 %}active{% endif %}">
+            <a data-toggle="tab" href="#labInfo">2</a>
+        </li>
+    </ul>
+</div>
+{% endif %}
+<div style="height: 10px;"></div>
+{% endblock %}
+
+{% block disp %}
+<div class="container">
+    <div class="tab-content">
+        <div id="recruInfo" class="tab-pane fade {% if active_label == 1 %}in active{% endif %}">
+            {% for recruitment in recruitments %}
+                <div class="row">
+                    <div class="col">
+                        <h3>{{ recruitment.head }}</h3>
+                        <p>{{ recruitment.body }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div id="labInfo" class="tab-pane fade {% if active_label == 2 %}in active{% endif %}">
+
+        </div>
+    </div>
+</div>
+{% endblock %}

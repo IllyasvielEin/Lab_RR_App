@@ -11,22 +11,29 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
-    'django.contrib.auth',
     'django.contrib.admin',
-    'django.contrib.sessions',
-    'django.contrib.staticfiles',
+    'django.contrib.auth',
     'django.contrib.contenttypes',
+    'django.contrib.sessions',
     'django.contrib.messages',
-    'labapp',
+    'django.contrib.staticfiles',
+    'labapp.apps.LabAppConfig',
 ]
 
 MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'labapp.urls'
+ROOT_URLCONF = 'myproject.urls'
 
 DATABASES = {
     'default': {
@@ -58,23 +65,10 @@ TEMPLATES = [
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'labapp/static'),
 ]
 
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
@@ -88,3 +82,53 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+# Logger
+LOG_DIR = os.path.join(BASE_DIR, "logs")
+if not os.path.exists(LOG_DIR):
+    os.mkdir(LOG_DIR)
+
+# 基本配置，可以复用的
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,  # 禁用已经存在的logger实例
+    "filters": {"require_debug_false": {"()": "django.utils.log.RequireDebugFalse"}},
+    "formatters": {  # 定义了两种日志格式
+        "verbose": {  # 详细
+            "format": "%(levelname)s %(asctime)s [%(module)s]: "
+                      "%(message)s"
+        },
+        'simple': {  # 简单
+            'format': '[%(levelname)s][%(asctime)s][%(filename)s:%(lineno)d]%(message)s'
+        },
+    },
+    "handlers": {  # 定义了三种日志处理方式
+        "mail_admins": {  # 只有debug=False且Error级别以上发邮件给admin
+            "level": "ERROR",
+            "filters": ["require_debug_false"],
+            "class": "django.utils.log.AdminEmailHandler",
+        },
+        'file': {  # 对WARNING级别以上信息以日志文件形式保存
+            'level': "WARNING",
+            'class': 'logging.handlers.RotatingFileHandler',  # 滚动生成日志，切割
+            'filename': os.path.join(LOG_DIR, 'django.log'),  # 日志文件名
+            'maxBytes': 1024 * 1024 * 10,  # 单个日志文件最大为10M
+            'backupCount': 5,  # 日志备份文件最大数量
+            'formatter': 'simple',  # 简单格式
+            'encoding': 'utf-8',  # 放置中文乱码
+        },
+        "console": {  # 打印到终端console
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        },
+    },
+
+    "loggers": {
+        "labapp": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+            "propagate": True,  # 向不向更高级别的logger传递
+        }
+    },
+}

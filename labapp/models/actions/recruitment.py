@@ -3,9 +3,11 @@ from enum import Enum
 from django.db import models
 from django.utils.translation import gettext_lazy as gl
 
-from labapp.modeldir.lab.labinfo import Laboratory
+from labapp.models.lab.labinfo import Laboratory
 
 class Recruitment(models.Model):
+    class Meta:
+        app_label = 'labapp'
 
     class Status(models.TextChoices):
         ONGOING = "Ongoing"
@@ -14,17 +16,17 @@ class Recruitment(models.Model):
 
     lab = models.ForeignKey(Laboratory, on_delete=models.CASCADE)
 
-    content = models.CharField(max_length=255, null=False)
+    content = models.CharField(max_length=255, blank=False)
 
     date = models.DateField()
 
     time = models.CharField(max_length=50)
 
-    requirements = models.CharField(max_length=255, null=False, verbose_name='招新要求')
+    requirements = models.CharField(max_length=255, blank=False, verbose_name='招新要求')
 
-    recruitment_start_date = models.DateField(null=False, verbose_name='招新开始时间')
+    recruitment_start_date = models.DateField(blank=False, verbose_name='招新开始时间')
 
-    recruitment_end_date = models.DateField(null=False, verbose_name='招新结束时间')
+    recruitment_end_date = models.DateField(blank=False, verbose_name='招新结束时间')
 
     location = models.CharField(max_length=100)
 

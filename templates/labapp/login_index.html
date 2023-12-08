@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Lab System{% endblock %}
+
+{% block control %}
+<div>
+    <button id="button_login" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#motal_login">
+        Login
+    </button>
+    <button id="button_register" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#motal_register">
+        Register
+    </button>
+</div>
+<div style="height: 10px;"></div>
+{% endblock %}
+
+{% block disp %}
+<div class="container">
+    <div id="motal_login" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{% url 'auth.login' %}" method="post">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                      <label for="motal_login">Lab</label>
+                    </div>
+                    <div class="modal-body">
+                        {{ login_form }}
+                    </div>
+                    <div class="modal-footer">
+                      <button type="submit" class="btn btn-lg btn-primary">
+                        Submit
+                      </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="motal_register" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <form action="{% url 'auth.sighup' %}" method="post" onsubmit="return validateForm()">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                      <label for="motal_register">Lab</label>
+                    </div>
+                    <div class="modal-body">
+                        {{ register_form }}
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-lg btn-primary">
+                                Submit
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

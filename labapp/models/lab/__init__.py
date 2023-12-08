@@ -1,0 +1,1 @@
+from .labinfo import Laboratory
