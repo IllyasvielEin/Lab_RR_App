@@ -25,7 +25,7 @@
             {% if user %}
                 <form class="navbar-form navbar-right" action="{% url 'auth.logout' %}" method="post">
                     {% csrf_token %}
-                    <span>Welcome, <a href="{% url 'main.index' %}">{{ user.username }}</a>&nbsp;&nbsp;</span>
+                    <span>Welcome, <a href="{% url 'page.user_details' %}">{{ user.username }}</a>&nbsp;&nbsp;</span>
                     <button id="logout" class="btn btn-default btn-sm">Log out</button>
                 </form>
             {% endif %}

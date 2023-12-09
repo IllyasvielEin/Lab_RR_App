@@ -1,6 +1,6 @@
 import logging
 from django.contrib import messages
-from django.core.exceptions import ValidationError
+from django.contrib.auth import authenticate
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.decorators.http import require_POST
@@ -38,31 +38,27 @@ def handle_sighup(request):
 @require_POST
 def handle_login(request):
     form = LoginForm(request.POST)
+
     if form.is_valid():
         username = form.cleaned_data['username']
         password = form.cleaned_data['password']
-
-        ok = False
-        user = User.objects.get(username=username)
-        if user:
-            if user.check_password(password):
-                login(request, user)
-                ok = True
-                messages.success(request, 'Login success')
-        else:
-            user_profile = UserBasic.objects.get(student_id=username)
-            if user_profile is not None:
+        user = authenticate(request, username=username, password=password)
+        if user is None:
+            try:
+                user_profile = UserBasic.objects.get(student_id=username)
                 if user_profile.user.check_password(password):
-                    login(request, user_profile.user)
-                    ok = True
-                    messages.success(request, 'Login success')
+                    user = user_profile.user
+            except (KeyError, UserBasic.DoesNotExist):
+                messages.error(request, '')
 
-        if not ok:
-            messages.error(request, 'No such username or error password')
+        if user:
+            login(request, user)
+            messages.success(request, 'Login success')
+        else:
+            messages.error(request, 'Username or password not correct')
     else:
-        messages.error(request, 'Internal Server Error.')
-
-    return redirect(reverse('main.index'))
+        messages.error(request, form.errors)
+    return redirect(reverse('main.index'), user=user)
 
 
 @require_POST

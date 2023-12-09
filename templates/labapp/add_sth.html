@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Lab Go{% endblock %}
+
+{% block control %}
+    <a href="{% url 'main.index' %}">返回主页面</a>
+{% endblock %}
+
+{% block disp %}
+    <form method="POST" action="{{ target }}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
+    </form>
+{% endblock %}

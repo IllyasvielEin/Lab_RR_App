@@ -1,10 +1,15 @@
-from django.contrib.auth.models import User
+from django import forms
 from django.db import models
+from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 
 class UserDetails(models.Model):
     class Meta:
         app_label = 'labapp'
+
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('创建时间'))
+
+    last_modified = models.DateTimeField(auto_now=True, verbose_name='最后修改时间')
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='details')
 
@@ -28,9 +33,7 @@ class UserDetails(models.Model):
 
     hobbies = models.CharField(max_length=255, verbose_name='爱好')
 
-    special_skills = models.CharField(max_length=255, verbose_name='特长')
-
-    social_practice = models.CharField(max_length=255, verbose_name='社会实践')
+    is_finish_details = models.BooleanField(default=False, verbose_name='信息填写完毕')
 
     def __str__(self):
         return self.name
@@ -71,3 +74,18 @@ class Rewards(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class UserDetailsForm(forms.ModelForm):
+    class Meta:
+        model = UserDetails
+        fields = ['name', 'gender', 'major', 'age', 'student_id', 'contact', 'hobbies']
+        labels = {
+            'name': '真实姓名',
+            'gender': '性别',
+            'major': '专业',
+            'age': '年龄',
+            'student_id': '学号',
+            'contact': '联系方式',
+            'hobbies': '爱好'
+        }

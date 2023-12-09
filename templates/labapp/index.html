@@ -1,50 +1,18 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}社团管理{% endblock %}
-
-{% block end_script %}
-<script>
-function validateForm() {
-    const password = document.getElementById("register_password").value;
-    const confirmPassword = document.getElementById("confirmPassword").value;
-    if (password !== confirmPassword) {
-        alert("密码不匹配");
-        return false;
-    }
-    const studentId = document.getElementById("student_id").value;
-    if (isNaN(studentId) || studentId.length !== 10) {
-        alert("学号输入错误");
-        return false;
-    }
-    
-
-    return true;
-}
-</script>
-{% endblock %}
+{% block title %}Lab Go{% endblock %}
 
 {% block control %}
-{% if username is none %}
-<div>
-    <button id="button_login" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#motal_login">
-        Login
-    </button>
-    <button id="button_register" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#motal_register">
-        Register
-    </button>
-</div>
-{% else %}
 <div class="container">
     <ul class="nav nav-tabs">
-        <li class="{% if active_label == 1 %}active{% endif %}">
-            <a data-toggle="tab" href="#recruInfo">1</a>
-        </li>
         <li class="{% if active_label == 2 %}active{% endif %}">
-            <a data-toggle="tab" href="#labInfo">2</a>
+            <a data-toggle="tab" href="#recruInfo" class="tab-link" data-url="{% url 'api.get_recrus' %}">招新信息</a>
+        </li>
+        <li class="{% if active_label == 3 %}active{% endif %}">
+            <a data-toggle="tab" href="#labInfo" class="tab-link" data-url="{% url 'api.get_labs' %}">实验室信息</a>
         </li>
     </ul>
 </div>
-{% endif %}
 <div style="height: 10px;"></div>
 {% endblock %}
 
@@ -52,19 +20,28 @@ function validateForm() {
 <div class="container">
     <div class="tab-content">
         <div id="recruInfo" class="tab-pane fade {% if active_label == 1 %}in active{% endif %}">
-            {% for recruitment in recruitments %}
-                <div class="row">
-                    <div class="col">
-                        <h3>{{ recruitment.head }}</h3>
-                        <p>{{ recruitment.body }}</p>
-                    </div>
-                </div>
-            {% endfor %}
+            <h2>招新信息</h2>
+            <div id="recruitmentList" data-name="content">
+
+            </div>
+            {% if has_perm %}
+            <a href="{% url 'page.add_recruitment' %}" class="btn btn-primary">添加招新信息</a>
+            {% endif %}
         </div>
 
         <div id="labInfo" class="tab-pane fade {% if active_label == 2 %}in active{% endif %}">
-
+            <h2>实验室信息</h2>
+            <div id="LabList" data-name="content">
+                
+            </div>
+            {% if has_perm %}
+            <a href="{% url 'page.add_lab' %}" class="btn btn-primary">添加实验室</a>
+            {% endif %}
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block end_script %}
+<script src="{% static 'js/recruitments.js' %}"></script>
 {% endblock %}

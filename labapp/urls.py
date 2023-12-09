@@ -5,5 +5,6 @@ urlpatterns = [
     path('', views.index, name='main.index'),
     # path('test/', include('labapp.services.test.urls')),
     path('auth/', include('labapp.services.auth.urls')),
-    # 其他URL模式和视图函数的映射
+    path('api/', include('labapp.services.api.urls')),
+    path('page/', include('labapp.services.page.urls'))
 ]

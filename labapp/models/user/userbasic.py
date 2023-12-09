@@ -1,6 +1,7 @@
 from django import forms
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.translation import gettext_lazy as _
 
 
 class UserBasic(models.Model):
@@ -11,8 +12,22 @@ class UserBasic(models.Model):
         verbose_name='学号'
     )
 
+    class Roles(models.TextChoices):
+        NORMAL = 'NR', _('普通用户')
+        INCHARGE = 'CH', _('In Charge')
+        TEACHER = 'TE', _('Teacher')
+
+    role = models.CharField(
+        max_length=2,
+        choices=Roles,
+        default=Roles.NORMAL,
+    )
+
     def __str__(self):
         return self.user.username
+
+    def has_perm(self):
+        return self.role != UserBasic.Roles.NORMAL or self.user.is_superuser or self.user.is_staff
 
 class RegistrationForm(forms.Form):
 

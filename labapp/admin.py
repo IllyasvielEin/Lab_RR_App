@@ -22,6 +22,7 @@ class UserAdmin(UserAdmin):
 admin.site.unregister(User)
 # User
 admin.site.register(User, UserAdmin)
+admin.site.register(UserBasic)
 admin.site.register(UserDetails)
 
 # lab
