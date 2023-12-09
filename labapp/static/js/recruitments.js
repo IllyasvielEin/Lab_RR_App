@@ -49,16 +49,37 @@ $(document).ready(function () {
             url: url,
             type: 'get',
             success: function (data) {
-                var content = ''
+                var content = '';
                 if (tabId === "recruInfo") {
                     data.forEach(function (item) {
-                        content += '<h3>' + item.title + '</h3>';
-                        content += '<p>' + item.content + '</p>';
+                        content += '<tr>';
+                        content += '<td>' + item.title + '</td>';
+                        content += '<td>' + item.content + '</td>';
+                        content += '<td>' + item.lab.name + '</td>';
+                        content += '</tr>';
                     });
-                } else if (tabId === "labInfo") {
+                }
+                else if (tabId === "labInfo") {
                     data.forEach(function (item) {
-                        content += '<h3>' + item.name + '</h3>';
-                        content += '<p>' + item.description + '</p>';
+                        content += '<tr>';
+                        content += '<td>' + item.name + '</td>';
+                        content += '<td>' + item.description + '</td>';
+                        content += '</tr>';
+                    });
+                }
+                else if (tabId === "labAdmin") {
+                    data.forEach(function (item) {
+                        content += '<tr>';
+                        content += '<td>' + item.name + '</td>';
+                        content += '</tr>';
+                    });
+                }
+                else if (tabId === "myApply") {
+                    data.forEach(function (item) {
+                        content += '<tr>';
+                        content += '<td>' + item.lab.name + '<td>';
+                        content += '<td>' + item.status.labels + '</td>';
+                        content += '</tr>';
                     });
                 }
                 tabContent.html(content);

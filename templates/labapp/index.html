@@ -8,9 +8,21 @@
         <li class="{% if active_label == 2 %}active{% endif %}">
             <a data-toggle="tab" href="#recruInfo" class="tab-link" data-url="{% url 'api.get_recrus' %}">招新信息</a>
         </li>
+
         <li class="{% if active_label == 3 %}active{% endif %}">
             <a data-toggle="tab" href="#labInfo" class="tab-link" data-url="{% url 'api.get_labs' %}">实验室信息</a>
         </li>
+
+        <li class="{% if active_label == 4 %}active{% endif %}">
+            <a data-toggle="tab" href="#myApply" class="tab-link" data-url="{% url 'api.get_my_apply' %}">个人申报</a>
+        </li>
+
+        {% if has_perm %}
+        <li>
+            <a data-toggle="tab" href="#labAdmin" class="tab-link" data-url="{% url 'api.get_labs_for_manage' %}">实验室管理</a>
+        </li>
+        {% endif %}
+
     </ul>
 </div>
 <div style="height: 10px;"></div>
@@ -21,9 +33,19 @@
     <div class="tab-content">
         <div id="recruInfo" class="tab-pane fade {% if active_label == 1 %}in active{% endif %}">
             <h2>招新信息</h2>
-            <div id="recruitmentList" data-name="content">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>标题</th>
+                        <th>内容</th>
+                        <th>实验室</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="recruitmentList" data-name="content">
 
-            </div>
+                </tbody>
+            </table>
             {% if has_perm %}
             <a href="{% url 'page.add_recruitment' %}" class="btn btn-primary">添加招新信息</a>
             {% endif %}
@@ -31,13 +53,55 @@
 
         <div id="labInfo" class="tab-pane fade {% if active_label == 2 %}in active{% endif %}">
             <h2>实验室信息</h2>
-            <div id="LabList" data-name="content">
-                
-            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>描述</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="LabList" data-name="content">
+
+                </tbody>
+            </table>
             {% if has_perm %}
             <a href="{% url 'page.add_lab' %}" class="btn btn-primary">添加实验室</a>
             {% endif %}
         </div>
+
+        <div id="myApply" class="tab-pane fade {% if active_label == 1 %}in active{% endif %}">
+            <h2>我的申请</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>实验室名称</th>
+                        <th>状态</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="myApplyList" data-name="content">
+
+                </tbody>
+            </table>
+        </div>
+
+        {% if has_perm %}
+        <div id="labAdmin" class="tab-pane fade {% if active_label == 1 %}in active{% endif %}">
+            <h2>实验室列表</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="labAdminList" data-name="content">
+
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
