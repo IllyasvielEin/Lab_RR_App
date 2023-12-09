@@ -36,8 +36,14 @@ def add_recrus(request):
 @require_GET
 def get_my_apply(request):
     user = request.user
-    recrus = Application.objects.filter(user=user)
-    data = list(recrus.values())
+    applies = Application.objects.filter(user=user)
+    data = []
+    for app in applies:
+        app_data = {
+            'lab_name': app.lab.name,
+            'status': app.get_status_display()  # 添加标签值到字典中
+        }
+        data.append(app_data)
     return JsonResponse(data, safe=False)
 
 

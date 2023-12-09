@@ -1,6 +1,7 @@
 import logging
 from django.shortcuts import render
 
+from labapp.models import Recruitment, Laboratory, Application
 from labapp.models.user.userbasic import RegistrationForm, LoginForm, UserBasic
 
 logger = logging.getLogger('labapp')
@@ -19,21 +20,27 @@ def index(request):
     else:
         perm = False
 
-    # logger.info(f"perm: {perm}")
-
     if user:
-        # logger.info("Has user logged in")
+        recrus = Recruitment.objects.all()
+        labs = Laboratory.objects.all()
+        my_applies = Application.objects.all()
+        my_labs = None
+        if perm:
+            my_labs = Laboratory.objects.filter(supervisor=user)
         context = {
             'user': user,
-            'has_perm': perm
+            'has_perm': perm,
+            'recruitments': recrus,
+            'labs': labs,
+            'my_appies': my_applies,
+            'my_labs': my_labs
         }
         return render(request, 'labapp/index.html', context)
-
-    # logger.info("No user logged in")
-    login_form = LoginForm()
-    register_form = RegistrationForm()
-    context = {
-        'login_form': login_form,
-        'register_form': register_form,
-    }
-    return render(request, 'labapp/login_index.html', context)
+    else:
+        login_form = LoginForm()
+        register_form = RegistrationForm()
+        context = {
+            'login_form': login_form,
+            'register_form': register_form,
+        }
+        return render(request, 'labapp/login_index.html', context)

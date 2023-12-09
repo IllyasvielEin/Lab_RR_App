@@ -43,7 +43,16 @@
                     </tr>
                 </thead>
                 <tbody id="recruitmentList" data-name="content">
-
+                    <tr>
+                        {% for recru in recruitments %}
+                            <td>{{ recru.title }}</td>
+                            <td>{{ recru.content }}</td>
+                            <td>{{ recru.lab.name }}</td>
+                            <td>
+                                <a href="{% url 'main.index' %}" class="btn btn-primary">查看</a>
+                            </td>
+                        {% endfor %}
+                    </tr>
                 </tbody>
             </table>
             {% if has_perm %}
@@ -62,7 +71,15 @@
                     </tr>
                 </thead>
                 <tbody id="LabList" data-name="content">
-
+                    <tr>
+                        {% for lab in labs %}
+                            <td>{{ lab.name }}</td>
+                            <td>{{ lab.description }}</td>
+                            <td>
+                                <a href="{% url 'main.index' %}" class="btn btn-primary">查看</a>
+                            </td>
+                        {% endfor %}
+                    </tr>
                 </tbody>
             </table>
             {% if has_perm %}
@@ -70,34 +87,49 @@
             {% endif %}
         </div>
 
-        <div id="myApply" class="tab-pane fade {% if active_label == 1 %}in active{% endif %}">
+        <div id="myApply" class="tab-pane fade {% if active_label == 3 %}in active{% endif %}">
             <h2>我的申请</h2>
             <table class="table">
                 <thead>
                     <tr>
                         <th>实验室名称</th>
                         <th>状态</th>
-                        <th>Action</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody id="myApplyList" data-name="content">
-
+                    <tr>
+                        {% for apply in my_appies %}
+                            <td>{{ apply.lab.name }}</td>
+                            <td>{{ apply.status }}</td>
+                            <td>
+                                <a href="{% url 'main.index' %}" class="btn btn-primary">查看</a>
+                            </td>
+                        {% endfor %}
+                    </tr>
                 </tbody>
             </table>
         </div>
 
         {% if has_perm %}
-        <div id="labAdmin" class="tab-pane fade {% if active_label == 1 %}in active{% endif %}">
+        <div id="labAdmin" class="tab-pane fade {% if active_label == 4 %}in active{% endif %}">
             <h2>实验室列表</h2>
             <table class="table">
                 <thead>
                     <tr>
                         <th>名称</th>
-                        <th>Action</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody id="labAdminList" data-name="content">
-
+                    <tr>
+                        {% for lab in my_labs %}
+                            <td>{{ lab.name }}</td>
+                            <td>
+                                <a href="{% url 'main.index' %}" class="btn btn-primary">查看</a>
+                            </td>
+                        {% endfor %}
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -107,5 +139,5 @@
 {% endblock %}
 
 {% block end_script %}
-<script src="{% static 'js/recruitments.js' %}"></script>
+
 {% endblock %}

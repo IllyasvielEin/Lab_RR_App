@@ -11,7 +11,7 @@ $(document).ready(function () {
                     content += '<h3>' + item.title + '</h3>';
                     content += '<p>' + item.content + '</p>';
                 });
-                $("#recruitmentList").html(content);
+                $("#recruitmentList").append(content);
             },
             error: function (xhr, status, error) {
                 console.error(xhr.responseText);
@@ -30,7 +30,7 @@ $(document).ready(function () {
                     content += '<h3>' + item.name + '</h3>';
                     content += '<p>' + item.description + '</p>';
                 });
-                $("#LabList").html(content);
+                $("#LabList").append(content);
             },
             error: function (xhr, status, error) {
                 console.error(xhr.responseText);
@@ -55,7 +55,7 @@ $(document).ready(function () {
                         content += '<tr>';
                         content += '<td>' + item.title + '</td>';
                         content += '<td>' + item.content + '</td>';
-                        content += '<td>' + item.lab.name + '</td>';
+                        content += '<td>' + item.lab_name + '</td>';
                         content += '</tr>';
                     });
                 }
@@ -77,12 +77,15 @@ $(document).ready(function () {
                 else if (tabId === "myApply") {
                     data.forEach(function (item) {
                         content += '<tr>';
-                        content += '<td>' + item.lab.name + '<td>';
-                        content += '<td>' + item.status.labels + '</td>';
+                        content += '<td>' +
+                            '<a href="{% url \'main.index\' %}" class="btn btn-primary">查看</a>' +
+                            '</td>';
+                        content += '<td>' + item.lab_name + '<td>';
+                        content += '<td>' + item.status + '</td>';
                         content += '</tr>';
                     });
                 }
-                tabContent.html(content);
+                tabContent.append(content);
             },
             error: function (xhr, status, error) {
                 console.error(xhr.responseText);
