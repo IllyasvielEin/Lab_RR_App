@@ -9,5 +9,6 @@ urlpatterns = [
     path('cancel_apply/<int:apply_id>', views.cancel_apply, name='api.cancel_apply'),
     path('approve_apply/<int:apply_id>', views.approve_apply, name='api.approve_apply'),
     path('reject_apply/<int:apply_id>', views.reject_apply, name='api.reject_apply'),
-    path('view_apply_list/<int:recru_id>', views.view_apply_list, name='api.view_apply_list')
+    path('view_apply_list/<int:recru_id>', views.view_apply_list, name='api.view_apply_list'),
+    path('view_apply_chart/<int:recru_id>', views.view_apply_chart, name='api.view_apply_chart')
 ]

@@ -22,7 +22,9 @@
                     <td>{{ recru.content }}</td>
                     <td>{{ recru.URCount }}</td>
                     <td>
-                        <a href="{% url 'api.view_apply_list' recru_id=recru.id %}" class="btn btn-primary">处理</a>
+                        <a href="{% url 'api.view_recru' recru_id=recru.id %}" class="btn btn-primary">查看招新内容</a>
+                        <a href="{% url 'api.view_apply_list' recru_id=recru.id %}" class="btn btn-primary">处理招新申请</a>
+                        <a href="{% url 'api.view_apply_chart' recru_id=recru.id %}" class="btn btn-primary">查看招新数据</a>
                     </td>
                 </tr>
                 {% endfor %}

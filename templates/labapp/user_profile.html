@@ -5,14 +5,57 @@
 {% block disp %}
 <div class="container">
     <h1>学生信息</h1>
-    <div>
-        <p>姓名：{{ target_user.details.name }}, 性别：{{ target_user.details.get_gender_display }}, 学号：{{ target_user.profile.student_id }}</p>
-        <p>专业：{{ target_user.details.major }}</p>
-        <p>兴趣爱好：{{ target_user.details.hobbies }}</p>
+    <div class="user-info">
+        <div class="info-item">
+            <span class="label">姓名:</span>
+            <span class="value">{{ target_user.details.name }}</span>
+        </div>
+        <div class="info-item">
+            <span class="label">性别:</span>
+            <span class="value">{{ target_user.details.get_gender_display }}</span>
+        </div>
+        <div class="info-item">
+            <span class="label">学号:</span>
+            <span class="value">{{ target_user.profile.student_id }}</span>
+        </div>
+        <div class="info-item">
+            <span class="label">专业:</span>
+            <span class="value">{{ target_user.details.major }}</span>
+        </div>
+        <div class="info-item">
+            <span class="label">兴趣爱好:</span>
+            <span class="value">{{ target_user.details.hobbies }}</span>
+        </div>
     </div>
 </div>
-{% endblock %}
 
-{% block botm_cont %}
-    <a href="{% url 'api.view_apply_list' recru_id=recru_id %}" class="btn btn-secondary">返回申请列表</a>
+<style>
+    .user-info {
+        background-color: #f9f9f9;
+        border: 1px solid #ccc;
+        padding: 20px;
+        margin-top: 20px;
+    }
+
+    .info-item {
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+    }
+
+    .label {
+        font-weight: bold;
+        margin-right: 10px;
+        font-size: 18px;
+        color: #333;
+        flex: 1;
+        text-align: right;
+    }
+
+    .value {
+        color: #666;
+        font-size: 16px;
+        flex: 3;
+    }
+</style>
 {% endblock %}

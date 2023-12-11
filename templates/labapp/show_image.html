@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Lab Go{% endblock %}
+
+{% block disp %}
+<div class="container">
+    <h2>招新 Chart</h2>
+    <img src="data:image/png;base64,{{ image_base64 }}" alt="Bar Chart">
+</div>
+{% endblock %}
+
+{% block botm_cont %}
+    <a href="{% url 'api.view_lab_recrus' lab_id=lab.id %}" class="btn btn-secondary">返回招新列表</a>
+{% endblock %}

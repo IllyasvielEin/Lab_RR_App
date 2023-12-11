@@ -1,4 +1,9 @@
+import io
+import urllib
+import base64
 import logging
+import matplotlib.pyplot as plt
+
 
 from django.contrib import messages
 from django.http import JsonResponse
@@ -111,9 +116,6 @@ def get_lab_apply(request):
 
 def view_apply_list(request, recru_id: int):
     recruitment = get_object_or_404(Recruitment, id=recru_id)
-    applications = Application.objects.filter(recruitment=recruitment)
-    if applications.count() == 0:
-        applications = None
 
     untreated_applies = Application.objects.filter(recruitment=recruitment, status=Application.AppStatus.UNDER_REVIEW)
     approve_applies = Application.objects.filter(recruitment=recruitment, status=Application.AppStatus.APPROVE)
@@ -126,3 +128,41 @@ def view_apply_list(request, recru_id: int):
         'c_applies': reject_applies,
     }
     return render(request, 'labapp/lab_applies.html', context)
+
+
+def view_apply_chart(request, recru_id: int):
+    recruitment = get_object_or_404(Recruitment, id=recru_id)
+    lab = recruitment.lab
+
+    untreated_applies = Application.objects.filter(recruitment=recruitment, status=Application.AppStatus.UNDER_REVIEW)
+    approve_applies = Application.objects.filter(recruitment=recruitment, status=Application.AppStatus.APPROVE)
+    reject_applies = Application.objects.filter(recruitment=recruitment, status=Application.AppStatus.REJECT)
+
+    a_count = untreated_applies.count()
+    b_count = approve_applies.count()
+    c_count = reject_applies.count()
+    sum = a_count + b_count + c_count
+
+    # 生成柱状图
+    labels = ['Total', 'Under Review', 'Approved', 'Rejected']
+    values = [sum, a_count, b_count, c_count]
+
+    plt.figure(figsize=(8, 6))
+    plt.bar(labels, values, color=['blue', 'green', 'red'])
+    plt.xlabel('Application Status')
+    plt.ylabel('Number of Applications')
+    plt.title('Applications Status Distribution')
+
+    # 将图表转换成数据流
+    buffer = io.BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+    buffer.close()
+
+    context = {
+        'lab': lab,
+        'image_base64': image_base64
+    }
+
+    return render(request, 'labapp/show_image.html', context)

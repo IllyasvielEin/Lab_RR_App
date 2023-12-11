@@ -1,26 +1,87 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}Lab Go{% endblock %}
+
+{% block title %}Lab Go - 招新信息详情{% endblock %}
 
 {% block disp %}
 <div class="container">
-    <h1>招新信息详情</h1>
-    <div>
-        <h2>{{ recruitment.title }}</h2>
-        <p><strong>实验室：</strong> {{ recruitment.lab.name }}</p>
-        <p><strong>状态：</strong> {{ recruitment.state }}</p>
-        <p><strong>状态：</strong> {{ recruitment.content }}</p>
-        <p><strong>状态：</strong> {{ recruitment.requirements }}</p>
-        <p><strong>开始时间：</strong> {{ recruitment.start_date }}</p>
-        <p><strong>结束时间：</strong> {{ recruitment.end_date }}</p>
+    <div class="card">
+        <div class="card-header">
+            <h1 class="card-title">招新信息详情</h1>
+        </div>
+        <div class="card-body">
+            <h2>{{ recruitment.title }}</h2>
+            <div class="details">
+                <div class="info-section">
+                    <p class="info-label">实验室</p>
+                    <p class="info-value">{{ recruitment.lab.name }}</p>
+                </div>
+                <div class="info-section">
+                    <p class="info-label">状态</p>
+                    <p class="info-value">{{ recruitment.state }}</p>
+                </div>
+                <div class="info-section">
+                    <p class="info-label">内容</p>
+                    <p class="info-value">{{ recruitment.content }}</p>
+                </div>
+                <div class="info-section">
+                    <p class="info-label">要求</p>
+                    <p class="info-value">{{ recruitment.requirements }}</p>
+                </div>
+                <div class="info-section">
+                    <p class="info-label">开始时间</p>
+                    <p class="info-value">{{ recruitment.start_date }}</p>
+                </div>
+                <div class="info-section">
+                    <p class="info-label">结束时间</p>
+                    <p class="info-value">{{ recruitment.end_date }}</p>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+<style>
+    .container {
+        margin-top: 10px;
+    }
+
+    .details {
+        margin-top: 20px;
+    }
+
+    .card-header {
+        border-bottom: 1px solid #dee2e6;
+        text-align: center;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .info-section {
+        margin-bottom: 15px;
+    }
+
+    .info-label {
+        font-weight: bold;
+        font-size: 20px;
+        margin-bottom: 5px;
+    }
+
+    .info_value {
+        font-weight: bold;
+        font-size: 18px;
+    }
+</style>
 {% endblock %}
 
 {% block botm_cont %}
+<div class="container">
     {% if user and user.is_superuser or user.is_staff or user.profile.has_perm %}
         <a href="{% url 'api.edit_recru' recru_id=recruitment.id %}" class="btn btn-primary">编辑信息</a>
     {% endif %}
     <a href="{% url 'api.edit_apply' recru_id=recruitment.id %}" class="btn btn-primary">提交申请</a>
     <a href="{% url 'main.index' %}" class="btn btn-primary">返回主页面</a>
+</div>
 {% endblock %}
