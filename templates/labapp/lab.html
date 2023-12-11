@@ -1,10 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Lab Go{% endblock %}
 
-</body>
-</html>
+{% block disp %}
+<div class="container">
+    <h3>实验室信息</h3>
+    <div>
+        <h2><strong>{{ lab.name }}</strong> </h2>
+        <p>实验室描述：{{ lab.description }}</p>
+        <p>实验室联系方式：{{ lab.contact_information }}</p>
+        <p>实验室地址：{{ lab.location }}</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block botm_cont %}
+    {% if user.is_superuser %}
+        <a href="{% url 'api.edit_lab' lab_id=lab.id %}" class="btn btn-secondary">编辑信息</a>
+        <a href="{% url 'api.view_lab_recrus' lab_id=lab.id %}" class="btn btn-secondary">查看招新信息</a>
+    {% endif %}
+    <a href="{% url 'main.index' %}" class="btn btn-secondary">返回主页面</a>
+{% endblock %}

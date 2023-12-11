@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Lab Go{% endblock %}
+
+{% block disp %}
+<div class="container">
+    <h1>招新信息列表</h1>
+    <div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>招新标题</th>
+                    <th>招新内容</th>
+                    <th>未处理数量</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for recru in recruitments %}
+                <tr>
+                    <td>{{ recru.title }}</td>
+                    <td>{{ recru.content }}</td>
+                    <td>{{ recru.URCount }}</td>
+                    <td>
+                        <a href="{% url 'api.view_apply_list' recru_id=recru.id %}" class="btn btn-primary">处理</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block botm_cont %}
+    <a href="{% url 'api.view_lab' lab_id=lab.id %}" class="btn btn-primary">返回实验室页面</a>
+{% endblock %}

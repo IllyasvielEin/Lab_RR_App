@@ -1,6 +1,8 @@
+from django.contrib.auth.models import User
 from django.urls import reverse
 from django.contrib import messages
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render, get_object_or_404
+from django.views.decorators.http import require_GET
 
 from labapp.models.user.userdetails import UserDetailsForm
 
@@ -16,3 +18,16 @@ def update_user_details(request):
     else:
         messages.error(request, f'{form.errors}')
     return redirect(reverse('page.user_details'))
+
+
+@require_GET
+def view_user_details(request, user_id: int, recru_id: int):
+    user = request.user
+    target_user = get_object_or_404(User, id=user_id)
+    context = {
+        'recru_id': recru_id,
+        'current_user': user,
+        'target_user': target_user,
+    }
+
+    return render(request, 'labapp/user_profile.html', context)

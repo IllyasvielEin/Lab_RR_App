@@ -1,12 +1,16 @@
+import logging
+
 from django.urls import reverse
-from django.core import serializers
 from django.contrib import messages
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render, redirect
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_GET, require_POST
 
 from labapp.models import Recruitment, Application, Laboratory
+from labapp.models.actions.application import ApplicationForm, NewApplicationForm
 from labapp.models.actions.recruitment import RecruitmentForm
+
+logger = logging.getLogger(__name__)
 
 
 @require_GET
@@ -15,6 +19,7 @@ def get_all_recrus(request):
     data = list(recrus.values())
     return JsonResponse(data, safe=False)
 
+
 @require_GET
 def get_all_not_expired_recrus(request):
     not_expired_recrus = [recru for recru in Recruitment.objects.all() if not recru.is_expired()]
@@ -22,31 +27,59 @@ def get_all_not_expired_recrus(request):
 
 
 @require_POST
-def add_recrus(request):
+def add_recru(request):
     form = RecruitmentForm(request.POST)
     if form.is_valid():
         form.save()
-        messages.success(request, 'Recruitment')
+        messages.success(request, 'Add recruitment ok')
     else:
         messages.error(request, form.errors)
 
     return redirect(reverse('main.index'))
 
 
-@require_GET
-def get_my_apply(request):
+def view_recru(request, recru_id: int):
     user = request.user
-    applies = Application.objects.filter(user=user)
-    data = []
-    for app in applies:
-        app_data = {
-            'lab_name': app.lab.name,
-            'status': app.get_status_display()  # 添加标签值到字典中
+    recru = Recruitment.objects.get(id=recru_id)
+    context = {
+        'recruitment': recru,
+        'user': user,
+    }
+    return render(request, 'labapp/recruitment.html', context)
+
+
+def edit_recru(request, recru_id: int):
+    recru = get_object_or_404(Recruitment, id=recru_id)
+    form = RecruitmentForm(
+        instance=recru,
+        initial={
+            'state_date': recru.start_date,
+            'end_date': recru.end_date,
         }
-        data.append(app_data)
-    return JsonResponse(data, safe=False)
+    )
+    context = {
+        'form': form,
+        'target': reverse('api.update_recru', kwargs={'recru_id': recru_id})
+    }
+    return render(request, 'labapp/add_sth.html', context)
 
 
-@require_GET
-def get_lab_apply(request):
-    return None
+def update_recru(request, recru_id: int):
+    instance = get_object_or_404(Recruitment, id=recru_id)
+    form = RecruitmentForm(request.POST, instance=instance)
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Update recruitment ok')
+    else:
+        messages.error(request, f'{form.errors}')
+    return redirect(reverse('main.index'))
+
+
+def view_lab_recrus(request, lab_id: int):
+    lab = get_object_or_404(Laboratory, id=lab_id)
+    recrus = Recruitment.objects.filter(lab=lab)
+    context = {
+        'lab': lab,
+        'recruitments': recrus,
+    }
+    return render(request, 'labapp/recruitment_list.html', context)

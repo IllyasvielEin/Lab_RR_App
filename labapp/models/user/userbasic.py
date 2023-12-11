@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 class UserBasic(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+
     student_id = models.CharField(
         max_length=10,
         blank=False,

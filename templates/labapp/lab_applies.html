@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static %}
+{% load user_macros %}
+{% block title %}Lab Go{% endblock %}
+
+{% block disp %}
+<div class="container">
+    <h1>报名信息</h1>
+    <div>
+
+        <ul class="nav nav-tabs">
+            <li class="nav-item active">
+                <a class="nav-link active" data-toggle="tab" href="#a_applies">未处理申请</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#b_applies">通过申请</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#c_applies">拒绝申请</a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+
+            <!-- A applies -->
+            <div id="a_applies" class="container tab-pane active in active">
+                {% apply_table a_applies %}
+            </div>
+
+            <!-- B applies -->
+            <div id="b_applies" class="container tab-pane fade">
+                {% apply_table b_applies %}
+            </div>
+
+            <!-- C applies -->
+            <div id="c_applies" class="container tab-pane fade">
+                {% apply_table c_applies %}
+            </div>
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block botm_cont %}
+    <a href="{% url 'api.view_lab_recrus' lab_id=lab.id %}" class="btn btn-secondary">返回招新列表</a>
+{% endblock %}

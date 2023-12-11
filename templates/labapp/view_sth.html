@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Lab Go{% endblock %}
+
+{% block style %}
+    <style>
+        {% static 'css/form_show.css' %}
+    </style>
+{% endblock %}
+
+{% block disp %}
+    <form method="POST" action="{{ target }}">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-group">
+                {{ field.label_tag }}
+                {% if field.field.disabled %}
+                    {{ field }}
+                {% else %}
+                    {{ field.as_widget(attrs={'readonly': 'readonly'}) }}
+                {% endif %}
+            </div>
+        {% endfor %}
+        <button type="submit">Submit</button>
+    </form>
+{% endblock %}
+
+{% block botm_cont %}
+    <a href="{% url 'main.index' %}" class="return-link">返回主页面</a>
+{% endblock %}

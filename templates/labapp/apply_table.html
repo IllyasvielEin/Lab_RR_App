@@ -1,0 +1,26 @@
+<div>
+<table class="table">
+    <thead>
+    <tr>
+        <th>申请编号</th>
+        <th>申请人姓名</th>
+        <th>申请状态</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+        {% for apply in applies %}
+        <tr>
+            <td>{{ apply.id }}</td>
+            <td>{{ apply.user.details.name }}</td>
+            <td>{{ apply.get_status_display }}</td>
+            <td>
+                <a href="{% url 'api.view_user_details' recru_id=apply.recruitment.id user_id=apply.user.id %}" class="btn btn-default">查看</a>
+                <a href="{% url 'api.approve_apply' apply_id=apply.id %}" class="btn btn-primary">同意</a>
+                <a href="{% url 'api.reject_apply' apply_id=apply.id %}" class="btn btn-danger">拒绝</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>

@@ -1,10 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Lab Go{% endblock %}
 
-</body>
-</html>
+{% block disp %}
+<div class="container">
+    <h1>招新信息详情</h1>
+    <div>
+        <h2>{{ recruitment.title }}</h2>
+        <p><strong>实验室：</strong> {{ recruitment.lab.name }}</p>
+        <p><strong>状态：</strong> {{ recruitment.state }}</p>
+        <p><strong>状态：</strong> {{ recruitment.content }}</p>
+        <p><strong>状态：</strong> {{ recruitment.requirements }}</p>
+        <p><strong>开始时间：</strong> {{ recruitment.start_date }}</p>
+        <p><strong>结束时间：</strong> {{ recruitment.end_date }}</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block botm_cont %}
+    {% if user and user.is_superuser or user.is_staff or user.profile.has_perm %}
+        <a href="{% url 'api.edit_recru' recru_id=recruitment.id %}" class="btn btn-primary">编辑信息</a>
+    {% endif %}
+    <a href="{% url 'api.edit_apply' recru_id=recruitment.id %}" class="btn btn-primary">提交申请</a>
+    <a href="{% url 'main.index' %}" class="btn btn-primary">返回主页面</a>
+{% endblock %}

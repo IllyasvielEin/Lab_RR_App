@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Lab Go{% endblock %}
+
+{% block disp %}
+<div class="container">
+    <h2><strong>申请信息</strong></h2>
+    <div>
+        <p>申请实验室：{{ apply.recruitment.lab.name }}</p>
+        <p>招新标题：{{ apply.recruitment.title }}</p>
+        <p>招新内容：{{ apply.recruitment.content }}</p>
+        <p>申请状态：{{ apply.get_status_display }}</p>
+        <p>申请备注：{{ apply.remarks }}</p>
+        <a href="{% url 'api.view_recru' recru_id=apply.recruitment.id %}">申请详情</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block botm_cont %}
+    {% if apply.user.id == user.id %}
+        <a href="{% url 'api.cancel_apply' apply_id=apply.id %}" class="btn btn-secondary">撤销</a>
+    {% endif %}
+    <a href="{% url 'main.index' %}" class="btn btn-secondary">返回主页面</a>
+{% endblock %}

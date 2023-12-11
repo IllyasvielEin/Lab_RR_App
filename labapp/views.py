@@ -21,9 +21,9 @@ def index(request):
         perm = False
 
     if user:
-        recrus = Recruitment.objects.all()
+        recrus = Recruitment.objects.all().order_by('-created_at')
         labs = Laboratory.objects.all()
-        my_applies = Application.objects.all()
+        my_applies = Application.objects.filter(user=user)
         my_labs = None
         if perm:
             my_labs = Laboratory.objects.filter(supervisor=user)

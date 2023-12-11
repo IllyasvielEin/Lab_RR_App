@@ -27,8 +27,6 @@ class UserDetails(models.Model):
 
     major = models.CharField(max_length=100, blank=False, verbose_name='专业')
 
-    student_id = models.CharField(max_length=20, blank=False, verbose_name='学号')
-
     contact = models.CharField(max_length=50, blank=False, verbose_name='联系方式')
 
     hobbies = models.CharField(max_length=255, verbose_name='爱好')
@@ -79,13 +77,12 @@ class Rewards(models.Model):
 class UserDetailsForm(forms.ModelForm):
     class Meta:
         model = UserDetails
-        fields = ['name', 'gender', 'major', 'age', 'student_id', 'contact', 'hobbies']
+        fields = ['name', 'gender', 'major', 'age', 'contact', 'hobbies']
         labels = {
-            'name': '真实姓名',
-            'gender': '性别',
-            'major': '专业',
-            'age': '年龄',
-            'student_id': '学号',
-            'contact': '联系方式',
-            'hobbies': '爱好'
+            'name': _('真实姓名'),
+            'gender': _('性别'),
+            'major': _('专业'),
+            'age': _('年龄'),
+            'contact': _('联系方式'),
+            'hobbies': _('爱好')
         }

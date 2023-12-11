@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Lab Go{% endblock %}
+
+{% block disp %}
+<div class="container">
+    <h1>学生信息</h1>
+    <div>
+        <p>姓名：{{ target_user.details.name }}, 性别：{{ target_user.details.get_gender_display }}, 学号：{{ target_user.profile.student_id }}</p>
+        <p>专业：{{ target_user.details.major }}</p>
+        <p>兴趣爱好：{{ target_user.details.hobbies }}</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block botm_cont %}
+    <a href="{% url 'api.view_apply_list' recru_id=recru_id %}" class="btn btn-secondary">返回申请列表</a>
+{% endblock %}

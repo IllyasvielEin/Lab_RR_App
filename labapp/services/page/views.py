@@ -11,7 +11,7 @@ from labapp.models.user.userdetails import UserDetailsForm, UserDetails
 def add_recruitment(request):
     context = {
         'form': RecruitmentForm(),
-        'target': reverse('api.add_recrus')
+        'target': reverse('api.add_recru')
     }
     return render(request, 'labapp/add_sth.html', context)
 
