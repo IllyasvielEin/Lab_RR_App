@@ -18,6 +18,7 @@ class Recruitment(models.Model):
     class Status(models.TextChoices):
         ONGOING = "Ongoing"
         END = "Ended"
+        CANCEL = "CANCEL"
     state = models.CharField(max_length=10, choices=Status, default=Status.ONGOING)
 
     lab = models.ForeignKey(Laboratory, on_delete=models.CASCADE, related_name="recruitments", verbose_name='实验室')

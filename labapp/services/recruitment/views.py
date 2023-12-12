@@ -83,3 +83,13 @@ def view_lab_recrus(request, lab_id: int):
         'recruitments': recrus,
     }
     return render(request, 'labapp/recruitment_list.html', context)
+
+
+def delete_recru(request, recru_id: int):
+    recru = get_object_or_404(Recruitment, id=recru_id)
+    lab = Laboratory.objects.get(id=recru.lab.id)
+
+    recru.state = recru.Status.CANCEL
+    recru.save()
+
+    return redirect('main.index')

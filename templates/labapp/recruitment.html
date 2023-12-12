@@ -79,9 +79,11 @@
 {% block botm_cont %}
 <div class="container">
     {% if user and user.is_superuser or user.is_staff or user.profile.has_perm %}
-        <a href="{% url 'api.edit_recru' recru_id=recruitment.id %}" class="btn btn-primary">编辑信息</a>
-    {% endif %}
+        <a href="{% url 'api.edit_recru' recru_id=recruitment.id %}" class="btn btn-primary">编辑招新内容</a>
+        <a href="{% url 'api.delete_recru' recru_id=recruitment.id %}" class="btn btn-primary">撤销招新</a>
+    {% else %}
     <a href="{% url 'api.edit_apply' recru_id=recruitment.id %}" class="btn btn-primary">提交申请</a>
+    {% endif %}
     <a href="{% url 'main.index' %}" class="btn btn-primary">返回主页面</a>
 </div>
 {% endblock %}

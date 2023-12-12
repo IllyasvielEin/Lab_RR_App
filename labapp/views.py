@@ -21,7 +21,12 @@ def index(request):
         perm = False
 
     if user:
-        recrus = Recruitment.objects.all().order_by('-created_at')
+        all_recrus = Recruitment.objects.all()
+        for recru in all_recrus:
+            if recru.state == Recruitment.Status.ONGOING and recru.is_expired():
+                recru.state = recru.Status.END
+                recru.save()
+        recrus = Recruitment.objects.filter(state=Recruitment.Status.ONGOING).order_by('-created_at')
         labs = Laboratory.objects.all()
         my_applies = Application.objects.filter(user=user)
         my_labs = None
