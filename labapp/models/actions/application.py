@@ -17,9 +17,12 @@ class Application(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='applications', verbose_name='申请人')
 
-    recruitment = models.OneToOneField(
-        Recruitment, on_delete=models.CASCADE, related_name='applications',
-        verbose_name='招新词条')
+    recruitment = models.ForeignKey(
+        Recruitment,
+        on_delete=models.CASCADE,
+        related_name='applications',
+        verbose_name='招新词条'
+    )
 
     class AppStatus(models.TextChoices):
         CANCEL = "CC", _('Cancelled')

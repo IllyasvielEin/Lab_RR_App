@@ -17,7 +17,7 @@ class UserDetails(models.Model):
 
     class GenderType(models.TextChoices):
         MALE = "M"
-        END = "F"
+        FEMALE = "F"
         SECRET = "S"
         OTHER = "O"
 
