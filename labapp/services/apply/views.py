@@ -3,7 +3,9 @@ import urllib
 import base64
 import logging
 import matplotlib.pyplot as plt
-
+# 设置中文字体
+plt.rcParams['font.sans-serif'] = ['SimHei']  # 指定默认字体
+plt.rcParams['axes.unicode_minus'] = False  # 解决保存图像时负号'-'显示为方块的问题
 
 from django.contrib import messages
 from django.http import JsonResponse
@@ -157,12 +159,18 @@ def view_apply_chart(request, recru_id: int):
     plt.ylabel('Number of Applications')
     plt.title('Applications Status Distribution')
 
+<<<<<<< HEAD
     # 将图表转换成数据流
     buffer = io.BytesIO()
     plt.savefig(buffer, format='png')
     buffer.seek(0)
     application_chart = base64.b64encode(buffer.getvalue()).decode('utf-8')
     buffer.close()
+=======
+    # 生成柱状图
+    labels = ['测试', 'Under Review', 'Approved', 'Rejected']
+    values = [sum, a_count, b_count, c_count]
+>>>>>>> 0a49d60abf53cf1b785173a2ff3903acd7549e98
 
     # plt.figure(figsize=(8, 6))
     plt.bar(major_dict.keys(), major_dict.values())
