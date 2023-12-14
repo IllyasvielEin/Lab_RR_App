@@ -35,7 +35,7 @@ class Application(models.Model):
     remarks = models.CharField(max_length=255)
 
     def __str__(self):
-        return f"{self.user.username} - {self.lab.name} Application"
+        return f"{self.user.username}: Application"
 
 
 class ApplicationForm(forms.ModelForm):

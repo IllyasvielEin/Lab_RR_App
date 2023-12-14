@@ -20,11 +20,15 @@
         </div>
         <div class="info-item">
             <span class="label">专业:</span>
-            <span class="value">{{ target_user.details.major }}</span>
+            <span class="value">{{ target_user.details.get_major_display }}</span>
         </div>
         <div class="info-item">
             <span class="label">兴趣爱好:</span>
             <span class="value">{{ target_user.details.hobbies }}</span>
+        </div>
+        <div class="info-item">
+            <span class="label">申请备注:</span>
+            <span class="value">{{ apply.remarks }}</span>
         </div>
     </div>
 </div>

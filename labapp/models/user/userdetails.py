@@ -25,7 +25,18 @@ class UserDetails(models.Model):
 
     age = models.IntegerField(verbose_name='年龄')
 
-    major = models.CharField(max_length=100, blank=False, verbose_name='专业')
+    class MajorType(models.TextChoices):
+        COMPUTER_SCIENCE = "CS", "计算机科学与技术"
+        SOFTWARE_ENGINEERING = "SE", "软件工程"
+        DATA_SCIENCE = "DS", "数据科学"
+        INFORMATION_SYSTEMS = "IS", "信息系统"
+        NETWORK_ENGINEERING = "NE", "网络工程"
+        CYBER_SECURITY = "CSY", "网络安全"
+        ARTIFICIAL_INTELLIGENCE = "AI", "人工智能"
+        COMPUTER_ENGINEERING = "CE", "计算机工程"
+        INFORMATION_SECURITY = "ISY", "信息安全"
+        EMBEDDED_SYSTEMS = "ES", "嵌入式开发"
+    major = models.CharField(max_length=3, choices=MajorType, blank=False, verbose_name='专业')
 
     contact = models.CharField(max_length=50, blank=False, verbose_name='联系方式')
 
