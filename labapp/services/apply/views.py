@@ -152,6 +152,7 @@ def view_apply_chart(request, recru_id: int):
     major_dict = {str(new_key):major_dict[old_key] for old_key, new_key in UserDetails.MajorType.choices}
 
     # 柱状图-处理情况-总数-未处理-已通过-未通过
+    plt.figure(figsize=(8, 6))
     plt.bar(status_dict.keys(), status_dict.values())
     plt.xlabel('申请状态')
     plt.ylabel('人数')
@@ -164,7 +165,7 @@ def view_apply_chart(request, recru_id: int):
     plt.clf()
 
     # 图-申请人专业分析
-    fig, axs = plt.subplots(1, 2, figsize=(15, 5))
+    fig, axs = plt.subplots(1, 2, figsize=(15, 5), gridspec_kw={'width_ratios': [2.7, 1]})
     # 子图-柱状图
     axs[0].bar(major_dict.keys(), major_dict.values())
     axs[0].set_xlabel('专业')
@@ -174,6 +175,7 @@ def view_apply_chart(request, recru_id: int):
     major_dict = {key:value for key, value in major_dict.items() if value != 0}
     axs[1].pie(major_dict.values(), labels=major_dict.keys(), autopct='%1.1f%%', startangle=90)
     axs[1].set_title('各专业人数占比')
+    plt.tight_layout()
     buffer = io.BytesIO()
     plt.savefig(buffer, format='png')
     buffer.seek(0)
