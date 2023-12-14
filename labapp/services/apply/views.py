@@ -151,39 +151,35 @@ def view_apply_chart(request, recru_id: int):
     status_dict = {str(new_key):status_dict[old_key] for old_key, new_key in Application.AppStatus.choices}
     major_dict = {str(new_key):major_dict[old_key] for old_key, new_key in UserDetails.MajorType.choices}
 
-    # 图-处理情况-总数-未处理-已通过-未通过
-
-    # plt.figure(figsize=(8, 6))
+    # 柱状图-处理情况-总数-未处理-已通过-未通过
     plt.bar(status_dict.keys(), status_dict.values())
-    plt.xlabel('Application Status')
-    plt.ylabel('Number of Applications')
-    plt.title('Applications Status Distribution')
-
-<<<<<<< HEAD
-    # 将图表转换成数据流
+    plt.xlabel('申请状态')
+    plt.ylabel('人数')
+    plt.title('申请状态分布')
     buffer = io.BytesIO()
     plt.savefig(buffer, format='png')
     buffer.seek(0)
     application_chart = base64.b64encode(buffer.getvalue()).decode('utf-8')
     buffer.close()
-=======
-    # 生成柱状图
-    labels = ['测试', 'Under Review', 'Approved', 'Rejected']
-    values = [sum, a_count, b_count, c_count]
->>>>>>> 0a49d60abf53cf1b785173a2ff3903acd7549e98
+    plt.clf()
 
-    # plt.figure(figsize=(8, 6))
-    plt.bar(major_dict.keys(), major_dict.values())
-    plt.xlabel('Application Status')
-    plt.ylabel('Number of Applications')
-    plt.title('Applications Status Distribution')
-
-    # 将图表转换成数据流
+    # 图-申请人专业分析
+    fig, axs = plt.subplots(1, 2, figsize=(15, 5))
+    # 子图-柱状图
+    axs[0].bar(major_dict.keys(), major_dict.values())
+    axs[0].set_xlabel('专业')
+    axs[0].set_ylabel('人数')
+    axs[0].set_title('申请人专业分布')
+    # 子图-饼状图
+    major_dict = {key:value for key, value in major_dict.items() if value != 0}
+    axs[1].pie(major_dict.values(), labels=major_dict.keys(), autopct='%1.1f%%', startangle=90)
+    axs[1].set_title('各专业人数占比')
     buffer = io.BytesIO()
     plt.savefig(buffer, format='png')
     buffer.seek(0)
     major_chart = base64.b64encode(buffer.getvalue()).decode('utf-8')
     buffer.close()
+    plt.clf()
 
     context = {
         'lab': lab,
