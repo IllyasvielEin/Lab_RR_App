@@ -11,7 +11,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_GET
 
-from labapp.models import Application, Recruitment
+from labapp.models.actions import Application, Recruitment
+from labapp.models.user import UserDetails
 from labapp.models.actions.application import ApplicationForm, NewApplicationForm
 
 
@@ -134,21 +135,24 @@ def view_apply_chart(request, recru_id: int):
     recruitment = get_object_or_404(Recruitment, id=recru_id)
     lab = recruitment.lab
 
-    untreated_applies = Application.objects.filter(recruitment=recruitment, status=Application.AppStatus.UNDER_REVIEW)
-    approve_applies = Application.objects.filter(recruitment=recruitment, status=Application.AppStatus.APPROVE)
-    reject_applies = Application.objects.filter(recruitment=recruitment, status=Application.AppStatus.REJECT)
+    recruitment_list = Application.objects.filter(recruitment=recruitment)
 
-    a_count = untreated_applies.count()
-    b_count = approve_applies.count()
-    c_count = reject_applies.count()
-    sum = a_count + b_count + c_count
+    status_dict = {key[0]: 0 for key in Application.AppStatus.choices}
+    major_dict = {key[0]: 0 for key in UserDetails.MajorType.choices}
 
-    # 生成柱状图
-    labels = ['Total', 'Under Review', 'Approved', 'Rejected']
-    values = [sum, a_count, b_count, c_count]
 
-    plt.figure(figsize=(8, 6))
-    plt.bar(labels, values, color=['blue', 'green', 'red'])
+    # 数据清洗及处理
+    for i in recruitment_list:
+        status_dict[i.status] += 1
+        major_dict[i.user.details.major] += 1
+
+    status_dict = {str(new_key):status_dict[old_key] for old_key, new_key in Application.AppStatus.choices}
+    major_dict = {str(new_key):major_dict[old_key] for old_key, new_key in UserDetails.MajorType.choices}
+
+    # 图-处理情况-总数-未处理-已通过-未通过
+
+    # plt.figure(figsize=(8, 6))
+    plt.bar(status_dict.keys(), status_dict.values())
     plt.xlabel('Application Status')
     plt.ylabel('Number of Applications')
     plt.title('Applications Status Distribution')
@@ -157,12 +161,26 @@ def view_apply_chart(request, recru_id: int):
     buffer = io.BytesIO()
     plt.savefig(buffer, format='png')
     buffer.seek(0)
-    image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+    application_chart = base64.b64encode(buffer.getvalue()).decode('utf-8')
+    buffer.close()
+
+    # plt.figure(figsize=(8, 6))
+    plt.bar(major_dict.keys(), major_dict.values())
+    plt.xlabel('Application Status')
+    plt.ylabel('Number of Applications')
+    plt.title('Applications Status Distribution')
+
+    # 将图表转换成数据流
+    buffer = io.BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    major_chart = base64.b64encode(buffer.getvalue()).decode('utf-8')
     buffer.close()
 
     context = {
         'lab': lab,
-        'image_base64': image_base64
+        'application_chart': application_chart,
+        'major_chart': major_chart
     }
 
     return render(request, 'labapp/show_image.html', context)
