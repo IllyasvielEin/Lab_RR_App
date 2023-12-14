@@ -3,7 +3,9 @@ import urllib
 import base64
 import logging
 import matplotlib.pyplot as plt
-
+# 设置中文字体
+plt.rcParams['font.sans-serif'] = ['SimHei']  # 指定默认字体
+plt.rcParams['axes.unicode_minus'] = False  # 解决保存图像时负号'-'显示为方块的问题
 
 from django.contrib import messages
 from django.http import JsonResponse
@@ -144,7 +146,7 @@ def view_apply_chart(request, recru_id: int):
     sum = a_count + b_count + c_count
 
     # 生成柱状图
-    labels = ['Total', 'Under Review', 'Approved', 'Rejected']
+    labels = ['测试', 'Under Review', 'Approved', 'Rejected']
     values = [sum, a_count, b_count, c_count]
 
     plt.figure(figsize=(8, 6))
